@@ -17,6 +17,14 @@ bun run dev
 
 Open `http://localhost:3000`, then enter your `Base URL`, `API Key`, and model names in Settings. Prompt sources and WebDAV are also accessed directly by the browser.
 
+## Local model presets and Codex control
+
+Copy `web/.env.example` to `web/.env.local` and fill in the four provider keys. The model catalogue lives in `web/src/constant/local-model-presets.ts`. New browser profiles initialize these text-only channels once; saved configurations remain authoritative. Restart Vite after changing the environment file. Vite exposes `VITE_` values to this local browser application; this is not a server-side secret store. Do not publish a build containing personal credentials.
+
+The local Canvas Agent MCP supports node operations and `app_config_get`, `app_config_upsert_channel`, `app_config_remove_channel`, and `app_config_set_default_model`. Run the local source entry `canvas-agent/src/index.ts` using its installed `tsx` loader, and use the same entry with the `mcp` argument when registering with Codex. Keep the frontend connected to the Agent; configuration tools work without opening a canvas.
+
+Channel writes accept `apiKeyEnv` (for example `VITE_XIAOK_GPT_API_KEY`) instead of a raw key. Updating a channel without this field preserves its credential only when the address and protocol are unchanged. Reads expose `hasApiKey` and model identifiers, never keys or custom scripts. Model defaults require a configured channel and matching capability. Channel deletion preserves unavailable selections so generation fails explicitly until reconfigured. The existing manual tool-confirmation switch applies to configuration writes as well.
+
 ## Start the documentation site
 
 ```bash

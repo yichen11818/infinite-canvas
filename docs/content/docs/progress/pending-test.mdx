@@ -7,6 +7,8 @@ description: Implemented changes that still need manual verification
 
 The current release needs manual verification in these areas:
 
+- Codex 配置控制：连接本地 Agent 后可读取渠道、保存渠道、删除渠道及设置默认模型；返回值只包含密钥配置状态。开启手动确认后，配置写操作应等待确认，取消时不得修改配置。新浏览器首次打开应从源码初始化 4 个文字渠道、28 个模型，默认文字模型为 `xiaok-gpt::gpt-6.1-sol`；刷新不能覆盖用户修改和删除的渠道。实际生成仍需用户验证供应商服务。
+
 - Saved model selection: save a canvas node with a model, then remove its provider or remove that model while another video model remains the default. Generation, retry and pending-video recovery should keep the unavailable model selected and open configuration instead of sending a request to the default or first provider. Re-selecting a valid model should allow generation. Changing only the API key on the same provider should preserve the model; switching a config node from a valid image model to video should still use the video default.
 
 - Local storage usage on HTTP deployments: opening the Local storage settings tab at an HTTP origin without `navigator.storage.estimate` should still show IndexedDB content statistics, display an unavailable quota instead of an error, and keep the canvas data unchanged.

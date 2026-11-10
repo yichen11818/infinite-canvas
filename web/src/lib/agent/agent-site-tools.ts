@@ -1,4 +1,6 @@
 import type { NavigateFunction } from "react-router-dom";
+import { CONFIG_TOOL_LABELS, isConfigTool } from "./config-operations";
+import { runConfigTool } from "./agent-config-tools";
 
 import i18n from "@/i18n";
 import { fetchPrompts } from "@/services/api/prompts";
@@ -16,6 +18,10 @@ import { useWorkbenchAgentStore } from "@/stores/use-workbench-agent-store";
 // Their data lives locally in the browser through localforage and Zustand, so this module accesses the relevant stores directly.
 
 export const SITE_TOOL_NAMES = [
+    "app_config_get",
+    "app_config_upsert_channel",
+    "app_config_remove_channel",
+    "app_config_set_default_model",
     "canvas_list_projects",
     "generation_get_status",
     "workbench_image_get_config",
@@ -38,6 +44,7 @@ function siteText(key: string, options?: Record<string, unknown>) {
 }
 
 export const SITE_TOOL_LABELS: Record<SiteToolName, string> = {
+    ...CONFIG_TOOL_LABELS,
     get canvas_list_projects() { return siteText("canvasList"); },
     get generation_get_status() { return siteText("generationStatus"); },
     get workbench_image_get_config() { return siteText("imageConfig"); },
@@ -55,6 +62,7 @@ type GenerationStatus = "idle" | "queued" | "running" | "succeeded" | "failed";
 type GenerationStatusItem = { id: string; source: "canvas" | "image" | "video"; status: GenerationStatus; kind?: string; title?: string; prompt?: string; projectId?: string; createdAt?: string; updatedAt?: string; successCount?: number; failCount?: number; error?: string };
 
 export async function runSiteTool(name: SiteToolName, input: SiteToolInput, navigate: NavigateFunction, context: SiteToolContext = {}): Promise<unknown> {
+    if (isConfigTool(name)) return runConfigTool(name, input);
     switch (name) {
         case "canvas_list_projects":
             return listCanvasProjects(input);

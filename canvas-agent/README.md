@@ -109,6 +109,11 @@ default_tools_approval_mode = "approve"
 
 可用工具：
 
+- `app_config_get`：读取渠道和模型，不返回密钥。
+- `app_config_upsert_channel`：保存渠道和模型，通过前端环境变量名 `apiKeyEnv` 引用密钥。
+- `app_config_remove_channel`：删除渠道。
+- `app_config_set_default_model`：设置指定能力的默认模型。
+
 - `canvas_get_state`
 - `canvas_get_selection`
 - `canvas_export_snapshot`

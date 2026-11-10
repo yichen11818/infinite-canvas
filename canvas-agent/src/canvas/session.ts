@@ -26,6 +26,10 @@ type McpInventoryItem = { name: string; authStatus?: string };
 export const AGENT_PROTOCOL_VERSION = 6;
 
 const SITE_TOOLS = new Set<ToolName>([
+    "app_config_get",
+    "app_config_upsert_channel",
+    "app_config_remove_channel",
+    "app_config_set_default_model",
     "site_navigate",
     "canvas_list_projects",
     "workbench_image_get_config",

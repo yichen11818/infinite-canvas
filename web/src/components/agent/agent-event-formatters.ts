@@ -1,4 +1,5 @@
 import { isSiteTool, SITE_TOOL_LABELS } from "@/lib/agent/agent-site-tools";
+import { isConfigWriteTool } from "@/lib/agent/config-operations";
 import i18n from "@/i18n";
 import { summarizeCanvasAgentOps, type CanvasAgentOp } from "@/lib/canvas/canvas-agent-ops";
 import type { CanvasResourceReference } from "@/lib/canvas/canvas-resource-references";
@@ -505,7 +506,7 @@ export function formatBytes(bytes: number) {
 }
 
 export function isCanvasWriteTool(name: string) {
-    return name === "canvas_apply_ops" || name === "canvas_create_attachment_nodes";
+    return name === "canvas_apply_ops" || name === "canvas_create_attachment_nodes" || isConfigWriteTool(name);
 }
 
 function parseToolArguments(value: unknown) {

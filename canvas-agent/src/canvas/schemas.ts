@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { configToolDescriptions, configToolSchemas } from "./config-schemas.js";
 
 const recordSchema = z.record(z.unknown());
 const positionSchema = z.object({ x: z.number(), y: z.number() });
@@ -8,6 +9,10 @@ const generationModeSchema = z.enum(["text", "image", "video", "audio"]);
 
 /** Canvas Agent 对外提供的工具名称。 */
 export const toolNames = [
+    "app_config_get",
+    "app_config_upsert_channel",
+    "app_config_remove_channel",
+    "app_config_set_default_model",
     "site_navigate",
     "canvas_list_projects",
     "canvas_get_state",
@@ -90,6 +95,7 @@ const generationFlowSchema = z.object({
 });
 
 export const toolInputSchemas = {
+    ...configToolSchemas,
     site_navigate: z.object({ path: z.string() }),
     canvas_list_projects: z.object({ keyword: z.string().optional(), page: z.number().optional(), pageSize: z.number().optional() }),
     canvas_get_state: z.object({}).passthrough(),
@@ -127,6 +133,7 @@ export const toolInputSchemas = {
 } satisfies Record<ToolName, z.AnyZodObject>;
 
 export const toolDescriptions: Record<ToolName, string> = {
+    ...configToolDescriptions,
     site_navigate: "跳转网站页面。path 可为 / (首页)、/canvas (我的画布)、/canvas/:id (指定画布)、/image (生图工作台)、/video (视频创作台)、/prompts (提示词库)、/assets (我的素材)、/config (配置)。操作画布前若不在画布页，先用本工具打开画布。",
     canvas_list_projects: "列出用户全部画布（仅标题、创建/更新时间、节点数、连线数，不含完整数据），支持 keyword 搜索和 page/pageSize 分页。返回的 id 可配合 site_navigate 跳转到 /canvas/:id 打开对应画布。",
     canvas_get_state: "读取当前网页画布的节点、连线、选区和视口。",
