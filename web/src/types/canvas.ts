@@ -51,6 +51,10 @@ export type CanvasNodeMetadata = {
     status?: CanvasNodeStatus;
     errorDetails?: string;
     fontSize?: number;
+    description?: string;
+    promptOutputNodeIds?: string[];
+    requiredImageNodeId?: string;
+    requiredPromptNodeId?: string;
     generationMode?: CanvasGenerationMode;
     generationType?: CanvasImageGenerationType;
     model?: string;

@@ -322,14 +322,14 @@ export const CanvasNode = React.memo(function CanvasNode({
                 else onContextMenu(event, data.id);
             }}
         >
-            {!referenceSelectionState && (isSelected || hovered || isEditingTitle) && (
-                <div className="absolute left-3 top-[-28px] z-[65] max-w-[calc(100%-24px)]" onMouseDown={(event) => event.stopPropagation()} onPointerDown={(event) => event.stopPropagation()}>
+            {!referenceSelectionState && (
+                <div className="absolute bottom-full left-3 z-[65] mb-2 max-w-[calc(100%-24px)]" style={{ fontSize: 22, lineHeight: 1.35 }} onMouseDown={(event) => event.stopPropagation()} onPointerDown={(event) => event.stopPropagation()}>
                     {isEditingTitle ? (
                         <input
                             ref={titleInputRef}
                             value={titleDraft}
                             maxLength={64}
-                            className="h-6 max-w-full border-0 border-b border-dashed bg-transparent px-0 text-left text-xs font-medium outline-none"
+                            className="max-w-full border-0 border-b border-dashed bg-transparent px-0 text-left font-semibold outline-none"
                             style={{ borderColor: theme.node.muted, color: theme.node.text }}
                             onChange={(event) => setTitleDraft(event.target.value)}
                             onBlur={finishTitleEditing}
@@ -344,9 +344,9 @@ export const CanvasNode = React.memo(function CanvasNode({
                     ) : (
                         <button
                             type="button"
-                            className="block max-w-full truncate border-b border-dashed border-transparent px-0 py-0.5 text-left text-xs font-medium opacity-75 transition hover:border-current hover:opacity-100"
-                            style={{ color: theme.node.text }}
-                            title={t("canvas.node.renameHint")}
+                            className="line-clamp-2 max-w-full whitespace-pre-line break-words border-b border-dashed border-transparent px-0 py-0.5 text-left font-semibold transition hover:border-current"
+                            style={{ color: theme.node.text, display: "-webkit-box", WebkitBoxOrient: "vertical", WebkitLineClamp: 2, overflow: "hidden" }}
+                            title={`${data.title}\n${t("canvas.node.renameHint")}`}
                             onDoubleClick={(event) => {
                                 event.stopPropagation();
                                 setIsEditingTitle(true);
@@ -462,6 +462,12 @@ function NodeContent(props: NodeContentRendererProps) {
     if (props.node.type === CanvasNodeType.Text && props.node.metadata?.texts?.length && (props.node.metadata.status !== "error" || props.node.metadata.texts.some((text) => text.content))) return <TextContent {...props} />;
     if (props.node.metadata?.status === "loading") return <LoadingContent theme={props.theme} />;
     if (props.node.metadata?.status === "error") return <ErrorContent node={props.node} theme={props.theme} onRetry={props.onRetry} />;
+    if (!props.node.metadata?.content && props.node.metadata?.description && !props.isEditingContent) {
+        return <div className="flex h-full w-full flex-col justify-center gap-4 whitespace-pre-line p-6" style={{ color: props.theme.node.text, fontSize: props.node.metadata.fontSize || 20, lineHeight: 1.6 }}>
+            <span>{props.node.metadata.description}</span>
+            {props.node.metadata.model ? <span className="break-words opacity-75">{props.node.metadata.model.split("::").at(-1)}</span> : null}
+        </div>;
+    }
 
     const Renderer = nodeContentRenderers[props.node.type as CanvasNodeType];
     if (Renderer) return <Renderer {...props} />;
