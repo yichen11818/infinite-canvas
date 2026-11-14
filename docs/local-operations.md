@@ -39,3 +39,9 @@ node node_modules/vite/bin/vite.js --host 0.0.0.0 --port 3000
 ## 主应用根目录整理
 
 工作台主应用已上移到父目录根部，详见 [工作台运维入口](../../docs/operations.md)。本画布项目、MCP loader 和前端目录未移动；启动器从父目录 scripts/start-canvas.cjs 解析当前 web 目录。历史部分副本归档位置已同步。此次只有父项目目录整理，不改变画布功能或功能待办，已检查 todo.mdx 与 pending-test.mdx，无需新增功能记录。
+
+## 分支整合与工作树
+
+2026-11-14 已使用 `git worktree repair` 修复性能工作树指向迁移前 Git 目录的问题；工作树路径仍为 `C:/Users/11818/.codex/worktrees/canvas-performance-upstream/douyintest`，共享 Git 根为当前画布目录。性能提交历史、基准文档、视频接入和提示词功能合入本地 main，发布目标为个人 fork `yichen11818/infinite-canvas`，不写上游 `basketikun/infinite-canvas`。
+
+整合前功能组合的 93 项 Bun 测试通过，合并只补入基准与双语说明，前端源码与已测组合一致；未重新执行生产构建或付费生成。真实供应商能力及人工验证范围继续以 pending-test.mdx 为准。本地 output 和 .codex-temp 作为实验材料保留并排除 Git，不上传环境密钥。
